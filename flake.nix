@@ -36,6 +36,7 @@
             mkdir -p $out/bin/
             mv mayo $out/bin/
             mv mayo-conv $out/bin/
+            for file in $out/bin/*; do wrapProgram "$file" --prefix QT_QPA_PLATFORM : "xcb"; done
           '';
         };
 
