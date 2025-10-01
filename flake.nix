@@ -5,10 +5,17 @@
   };
   outputs =
     { self, nixpkgs }:
+    let
+      supportedSystems = [
+        "x86_64-linux"
+        "x86_64-darwin"
+      ];
+      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+    in
     {
-      packages.x86_64-linux = {
-        mayo = nixpkgs.legacyPackages.callPackage ./derivation.nix { };
-        default = self.packages.x86_64-linux.mayo;
-      };
+      packages = forAllSystems (system: {
+        mayo = nixpkgs.legacyPackages.${system}.callPackage ./derivation.nix { };
+        default = self.packages.${system}.mayo;
+      });
     };
 }
