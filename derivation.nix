@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   fetchFromGitHub,
   cmake,
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
     opencascade-occt
     assimp
   ];
+  enableParallelBuilding = true;
   buildPhase = ''
     cmake . -DMayo_BuildPluginAssimp=ON
     cmake --build . --config Release
@@ -34,4 +36,11 @@ stdenv.mkDerivation rec {
     mv mayo-conv $out/bin/
     for file in $out/bin/*; do wrapProgram "$file" --prefix QT_QPA_PLATFORM : "xcb"; done
   '';
+  meta = with lib; {
+    description = "Mayo - opensource 3D CAD viewer and converter";
+    homepage = "https://github.com/fougue/mayo";
+    licence = licenses.bsd2;
+    platforms = platforms.linux;
+    mainProgram = "mayo";
+  };
 }
